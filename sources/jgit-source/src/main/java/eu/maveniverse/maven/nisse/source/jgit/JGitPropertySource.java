@@ -249,6 +249,9 @@ public class JGitPropertySource implements PropertySource {
             Optional<String> versionHint = findVersionHint(configuration, repository);
             if (versionHint.isPresent()) {
                 vi = new VersionInformation(versionHint.get());
+                // Version hints are treated as if the previous commit was tagged,
+                // so we should add SNAPSHOT qualifier since we're ahead of that "previous commit"
+                vi = mayAddSnapshotQualifier(configuration, vi);
                 logger.debug("Using version hint from tag: {}", versionHint.get());
             } else {
                 vi = getVersionFromGit(configuration, repository);
